@@ -18,17 +18,20 @@ def main():
     for _ in range(5):
         soma_state.tick_forward()
 
-        # Simulate new sensory input (placeholder)
+        # Simulate new perceptual input (placeholder for future vision/audio/touch systems)
         soma_state.set("sensory", {"vision": "blurry_shapes"})
 
-        # Drive selection process
+        # Update SOMA’s motivational state
         motivation.update_drive_levels(soma_state)
         motivation.select_dominant_drive(soma_state)
 
-        # Choose a behavior in response to the selected drive
-        behavior.plan_behavior(soma_state)
+        # 🔧 NEW: Extract the dominant drive to pass it to behavior planner
+        dominant_drive = soma_state.get("current_dominant_drive")
 
-        # Debugging output
+        # Plan and log behavior
+        behavior.plan_behavior(soma_state, dominant_drive)
+
+        # Output state
         print("=" * 40)
         print(soma_state.debug_summary())
 

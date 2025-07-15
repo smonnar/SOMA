@@ -1,37 +1,36 @@
 # soma/core/behavior.py
 
 """
-Handles the planning and execution of SOMA's behaviors based on dominant drives.
+Behavior selection logic based on current drive state.
+This maps internal drives to actions that SOMA can perform.
 """
-
-from soma.core.states import SomaState
-from soma.core.action_handler import (
-    explore_environment,
-    seek_social_input,
-    review_memory,
-    align_with_caregiver,
-    return_to_familiar_state,
-)
 
 class BehaviorPlanner:
     def __init__(self):
-        self.behavior_map = {
-            "curiosity": explore_environment,
-            "social_proximity": seek_social_input,
-            "cognitive_integrity": review_memory,
-            "caregiver_alignment": align_with_caregiver,
-            "stability": return_to_familiar_state,
+        # Define drive-to-action mappings
+        self.drive_action_map = {
+            "curiosity": "explore_environment",
+            "truth_seeking": "query_caregiver",
+            "caregiver_alignment": "imitate_caregiver_behavior",
+            "social_proximity": "seek_closeness",
+            "stability": "return_to_familiar_state",
+            "cognitive_integrity": "review_memory",
+            "drive_saturation": "pause_and_integrate"
         }
 
-    def plan_behavior(self, soma_state: SomaState):
-        dominant_drive = soma_state.current_dominant_drive
-        planned_action = self.behavior_map.get(dominant_drive)
+    def plan_behavior(self, soma_state, dominant_drive):
+        """
+        Determine the best action to take based on the dominant internal drive.
+        """
+        planned_action = self.drive_action_map.get(dominant_drive, None)
 
         if planned_action:
-            # Execute the behavior (side effects on memory/state)
-            planned_action(soma_state)
+            soma_state.set("planned_action", planned_action)
             soma_state.append_note(
-                f"Chose action '{planned_action.__name__}' in response to drive '{dominant_drive}'."
+                f"Chose action '{planned_action}' in response to drive '{dominant_drive}'."
             )
         else:
-            soma_state.append_note(f"No action mapped for drive '{dominant_drive}'.")
+            soma_state.set("planned_action", None)
+            soma_state.append_note(
+                f"No action mapped for drive '{dominant_drive}'."
+            )
