@@ -1,8 +1,10 @@
 ________________
 
-SOMA: A Self-Organizing Mechanomorphic Agent  
-Toward the Emergence of Machine-Native Intelligence  
+# SOMA: A Self-Organizing Mechanomorphic Agent  
+### Toward the Emergence of Machine-Native Intelligence  
 ________________
+
+> **Note to readers**: This whitepaper is a theoretical document, not a blueprint for a working system. The implementation is ongoing, and I share this work not as a claim of expertise but as an invitation to dialogue, collaboration, and critique. If you're working on similar ideas—or find flaws in mine—I’d love to hear from you!
 
 ## Abstract
 
