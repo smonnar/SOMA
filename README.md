@@ -120,4 +120,5 @@ This project draws upon:
 
 ## 🤖 License
 
-This project is licensed for research purposes only. For inquiries, please contact the repository owner.
+This project is licensed under the [Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)](https://creativecommons.org/licenses/by-nc/4.0/).  
+You may share and adapt the material for non-commercial purposes with proper attribution. For commercial use or derivative works, please contact the author.
