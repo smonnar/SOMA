@@ -2,7 +2,7 @@
 
 import numpy as np
 
-class MemoryStore:
+class MemorySystem:
     def __init__(self):
         self.experiences = []
 
@@ -32,3 +32,12 @@ class MemoryStore:
 
     def _cosine_similarity(self, a, b):
         return np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b) + 1e-8)
+
+    def retrieve_snapshot(self):
+        """
+        Return a copy of the current memory as a snapshot dictionary.
+        This allows the reflex or behavior systems to reason over recent memory.
+        """
+        return {
+            "experiences": list(self.experiences)
+        }

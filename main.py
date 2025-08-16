@@ -1,39 +1,48 @@
 # main.py
-"""
-Main loop for SOMA's cognitive cycle.
-This simulates one 'tick' of cognition by updating perception, motivation, and selecting a drive-based action.
-"""
 
-from soma.core.states import SomaState
+import time
+from soma.memory import MemorySystem
 from soma.core.motivation import MotivationManager
 from soma.core.behavior import BehaviorPlanner
+from soma.core.states import SomaState
+from soma.core.reflex_engine import ReflexEngine
+
+TICK_DURATION = 1  # seconds
 
 def main():
-    # Initialize SOMA's internal components
-    soma_state = SomaState()
+    memory = MemorySystem()
     motivation = MotivationManager()
     behavior = BehaviorPlanner()
+    reflexes = ReflexEngine()
+    soma_state = SomaState()
 
-    # Simulate 5 cognitive ticks
-    for _ in range(5):
-        soma_state.tick_forward()
+    print("=" * 40)
 
-        # Simulate new perceptual input (placeholder for future vision/audio/touch systems)
-        soma_state.set("sensory", {"vision": "blurry_shapes"})
+    for tick in range(1, 6):
+        print(f"Tick: {tick}")
 
-        # Update SOMA’s motivational state
-        motivation.update_drive_levels(soma_state)
-        motivation.select_dominant_drive(soma_state)
+        # Update memory
+        soma_state.memory_snapshot = memory.retrieve_snapshot()
 
-        # 🔧 NEW: Extract the dominant drive to pass it to behavior planner
-        dominant_drive = soma_state.get("current_dominant_drive")
+        # Evaluate dominant drive
+        soma_state.current_dominant_drive = motivation.evaluate_drives(soma_state)
 
-        # Plan and log behavior
-        behavior.plan_behavior(soma_state, dominant_drive)
+        # Check reflexes first
+        reflex_action = reflexes.check_for_reflex(soma_state)
+        if reflex_action:
+            print(f"Reflex Triggered: {reflex_action}")
+            soma_state.append_note(f"Reflex action '{reflex_action}' triggered.")
+        else:
+            # Plan and execute behavior
+            dominant_drive = soma_state.current_dominant_drive
+            behavior.plan_behavior(soma_state, dominant_drive)
 
-        # Output state
+        # Show self-notes
+        print(f"Dominant Drive: {soma_state.current_dominant_drive}")
+        print(f"Planned Action: {soma_state.planned_action}")
+        print(f"Self-Notes: {soma_state.self_notes}")
         print("=" * 40)
-        print(soma_state.debug_summary())
+        time.sleep(TICK_DURATION)
 
 if __name__ == "__main__":
     main()
